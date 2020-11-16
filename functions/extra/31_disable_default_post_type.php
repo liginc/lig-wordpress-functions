@@ -6,10 +6,6 @@ function remove_default_taxonomy()
     global $wp_rewrite;
     if (!empty($wp_rewrite->extra_permastructs["category"])) unset($wp_rewrite->extra_permastructs["category"]);
     if (!empty($wp_rewrite->extra_permastructs["post_tag"])) unset($wp_rewrite->extra_permastructs["post_tag"]);
-    if (!empty(array_keys($wp_rewrite->queryreplace, 'category_name=')) && !empty($wp_rewrite->queryreplace[array_keys($wp_rewrite->queryreplace, 'category_name=')[0]])) unset($wp_rewrite->queryreplace[array_keys($wp_rewrite->queryreplace, 'category_name=')[0]]);
-    if (!empty(array_keys($wp_rewrite->queryreplace, 'tag=')) && !empty($wp_rewrite->queryreplace[array_keys($wp_rewrite->queryreplace, 'tag=')[0]])) unset($wp_rewrite->queryreplace[array_keys($wp_rewrite->queryreplace, 'tag=')[0]]);
-    if (!empty(array_keys($wp_rewrite->rewritecode, '%category%')) && !empty($wp_rewrite->rewritecode[array_keys($wp_rewrite->rewritecode, '%category%')[0]])) unset($wp_rewrite->rewritecode[array_keys($wp_rewrite->rewritecode, '%category%')[0]]);
-    if (!empty(array_keys($wp_rewrite->rewritecode, '%post_tag%')) && !empty($wp_rewrite->rewritecode[array_keys($wp_rewrite->rewritecode, '%post_tag%')[0]])) unset($wp_rewrite->rewritecode[array_keys($wp_rewrite->rewritecode, '%post_tag%')[0]]);
     unregister_taxonomy_for_object_type('category', 'post');
     unregister_taxonomy_for_object_type('post_tag', 'post');
     return $wp_rewrite;

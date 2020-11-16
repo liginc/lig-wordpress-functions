@@ -1,9 +1,6 @@
 <?php
 
-add_action('init', 'set_up_constants');
-
-function set_up_constants()
-{
+add_action('init', function () {
     /**
      * General Settings
      */
@@ -54,15 +51,13 @@ function set_up_constants()
     */
 
 
+
     /**
      * IMAGE SIZES
      */
     define('RESIZE_IMAGE_SIZES', [
-        414,
-        828,
-        1280,
-        1600,
-        2048
+        1125,
+        2880,
     ]);
 
     /*
@@ -70,13 +65,9 @@ function set_up_constants()
      * 'default'=>'default'を入れると、imgタグは元画像のurlがセットされます
      * 'default'=>414にすると、imgタグに414のsrcsetが挿入されます
      */
-    define('IMAGE_SIZES_FULL',[
-        414 => 414,
-        768 => 768,
-//        1024 => 1024,
-        1280 => 1280,
-//        1440 => 1440,
-        1600 => 1600,
+    define('IMAGE_SIZES_FULL', [
+        375 => 1125,
+        1024 => 2880,
         'default' => 'original'
     ]);
-}
+}, 0);
