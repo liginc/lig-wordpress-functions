@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-echo hogefuga
+echo $1
