@@ -76,7 +76,7 @@ add_action('init', function () {
     define('URL_INSTAGRAM', 'https://instagram.com/');
     define('URL_LINKED_IN', 'https://www.linkedin.com/');
     define('URL_HATEBU', 'https://b.hatena.ne.jp/');
-    define('URL_PINTERST', 'https://www.pinterest.jp/');
+    define('URL_PINTEREST', 'https://www.pinterest.jp/');
 
     /**
      * EXTERNAL LINKS
