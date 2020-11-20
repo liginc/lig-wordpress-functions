@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-touch hoge.txt
+echo hogefuga
