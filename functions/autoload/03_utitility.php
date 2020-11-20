@@ -88,28 +88,6 @@ add_filter('body_class', function ($classes) {
 });
 
 /**
- * locale condition
- */
-function is_jp()
-{
-    return (get_locale() === 'ja');
-}
-
-function get_text($key, $arr = NULL)
-{
-    $arr = (is_null($arr)) ? $GLOBALS['text'] : $arr;
-    return is_jp() ? nl2br($arr[$key][0]) : nl2br($arr[$key][1]);
-}
-
-/**
- * Return constant url depends locale
- */
-function get_const_url($name)
-{
-    return is_jp() ? constant('URL_' . $name) : constant('URL_EN_' . $name);
-}
-
-/**
  * Return local environment or not
  */
 function is_local()
