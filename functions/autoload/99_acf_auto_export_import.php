@@ -15,19 +15,20 @@ if (strpos($_SERVER['HTTP_HOST'], 'localhost') === 0) {
 
 function lig_acf_auto_export()
 {
-    $acf_groups = new WP_Query(
-        [
-            'post_type' => 'acf-field-group',
-            'post_status' => ['publish'],
-            'posts_per_pages' => -1
-        ]
-    );
-
     $selected = [];
 
-
-    if ($acf_groups->have_posts()) foreach ($acf_groups->posts as $post) {
-        $selected[] = $post->post_name;
+    /**
+     * quote from
+     * class-acf-admin-tool-export.php
+     * function html_field_selection()
+     */
+    $field_groups = acf_get_field_groups();
+    // loop
+    if ($field_groups) {
+        foreach ($field_groups as $field_group) {
+            //modified
+            $selected[] = esc_html($field_group['key']);
+        }
     }
 
     /**
