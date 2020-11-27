@@ -90,6 +90,7 @@ add_action('init', function () {
      * IMAGE SIZES
      */
     define('RESIZE_IMAGE_SIZES', [
+        560,
         1125,
         2880,
     ]);
@@ -97,8 +98,15 @@ add_action('init', function () {
     /*
      * キーはメディアクエリ、値は入れたい画像
      * 'default'=>'default'を入れると、imgタグは元画像のurlがセットされます
-     * 'default'=>414にすると、imgタグに414のsrcsetが挿入されます
+     * 'default'=>414にすると、imgタグに414のsrcsetが挿入されますcot
      */
+
+    define('IMAGE_SIZES_MIN', [
+        767 => 560,
+        1440 => 1125,
+        'default' => 'original'
+    ]);
+
     define('IMAGE_SIZES_FULL', [
         767 => 1125,
         1440 => 2880,
