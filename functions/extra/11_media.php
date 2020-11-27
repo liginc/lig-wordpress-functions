@@ -58,7 +58,7 @@ function get_custom_img_display($content)
 
     foreach ($selected_images as $image => $attachment_id) {
         $image_meta = wp_get_attachment_metadata($attachment_id);
-        $alt = (preg_match('/ alt="(.*?)"/',$image,$matches)) ? $matches[1] : get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
+        $alt = (preg_match('/ alt="(.*?)"/', $image, $matches)) ? $matches[1] : get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
         $content = str_replace($image, set_srcset_and_webp_with_source_tag($image_meta, $alt), $content); //ここ
     }
 
@@ -68,48 +68,33 @@ function get_custom_img_display($content)
 /**
  * 一覧ページなどのサムネイル用
  */
-function get_the_thumb_with_srcset_webp($post = null, $mode = 'full')
+function get_the_thumb_with_srcset_webp($post = null, $class = '', $mode = 'full')
 {
     if (is_null($post)) $post = $GLOBALS['post'];
     $attachment_id = get_post_meta($post->ID, '_thumbnail_id', true);
     if (empty($attachment_id)) return;
 
-    return get_srcset_webp_by_attachement_id($attachment_id, $post->post_title, $mode);
-}
-
-/**
- * トップピックアップNews用
- */
-function get_top_pickup_thumb_with_srcset_webp($post = null, $mode = 'full')
-{
-    if (is_null($post)) $post = $GLOBALS['post'];
-
-    if($post->post_type === "news") return srcset('news.jpg');
-
-    $attachment_id = get_post_meta($post->ID, '_thumbnail_id', true);
-    if (empty($attachment_id)) return;
-
-    return get_srcset_webp_by_attachement_id($attachment_id, $post->post_title, $mode);
+    return get_srcset_webp_by_attachement_id($attachment_id, $post->post_title, $class, $mode);
 }
 
 /**
  * attachment_idからsourceを取得
  */
-function get_srcset_webp_by_attachement_id($attachment_id = null, $alt = '', $mode = 'full')
+function get_srcset_webp_by_attachement_id($attachment_id = null, $alt = '', $class = '', $mode = 'full')
 {
     if (is_null($attachment_id)) return;
 
     $image_meta = wp_get_attachment_metadata($attachment_id);
     $alt = (!empty($alt)) ? $alt : (!empty ($attachment_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true))) ? $attachment_alt : get_the_title($attachment_id);
 
-    return set_srcset_and_webp_with_source_tag($image_meta, $alt, $mode);
+    return set_srcset_and_webp_with_source_tag($image_meta, $alt, $class, $mode);
 }
 
 
 /**
  * メインの関数
  */
-function set_srcset_and_webp_with_source_tag($image_meta, $alt = '', $mode = 'full')
+function set_srcset_and_webp_with_source_tag($image_meta, $alt = '', $class = '', $mode = 'full')
 {
     $mode = constant('IMAGE_SIZES_' . strtoupper($mode));
     $uploads = wp_upload_dir();
@@ -194,7 +179,7 @@ function set_srcset_and_webp_with_source_tag($image_meta, $alt = '', $mode = 'fu
 
     $ima_tag = '<img src="' . $src . '"' . $default_original_srcset . ' width="' . $width . '" height="' . $height . '" alt="' . $alt . '" loading="lazy">';
 
-    return '<picture>' . $webp . $original . $ima_tag . '</picture>';
+    return '<picture class="' . $class . '">' . $webp . $original . $ima_tag . '</picture>';
 }
 
 /**
