@@ -100,8 +100,8 @@ add_action('init', function () {
      * 'default'=>414にすると、imgタグに414のsrcsetが挿入されます
      */
     define('IMAGE_SIZES_FULL', [
-        375 => 1125,
-        1024 => 2880,
+        767 => 1125,
+        1440 => 2880,
         'default' => 'original'
     ]);
 }, 0);
