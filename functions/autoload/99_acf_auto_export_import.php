@@ -1,6 +1,6 @@
 <?php
 
-if (strpos($_SERVER['HTTP_HOST'], 'localhost') === 0) {
+if (wp_get_environment_type() === 'development') {
     add_action('acf/update_field_group', 'lig_acf_auto_export');
     add_action('acf/untrash_field_group', 'lig_acf_auto_export');
     add_action('acf/trash_field_group', 'lig_acf_auto_export');

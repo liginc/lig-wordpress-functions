@@ -13,7 +13,7 @@ function block_types_white_list($allowed_block_types)
         'core/list', // リスト
 //        'core/audio', // 音声
 //        'core/cover', // カバー
-        'core/file', // ファイル
+//        'core/file', // ファイル
 //        'core/video', // 動画
 
         // フォーマット
@@ -44,7 +44,7 @@ function block_types_white_list($allowed_block_types)
         // 埋め込み
 //        'core/embed', // 埋め込み
 //        'core-embed/twitter', // Twitter
-        'core-embed/youtube', // YouTube
+//        'core-embed/youtube', // YouTube
 //        'core-embed/facebook', // Facebook
 //        'core-embed/instagram', // Instagram
 //        'core-embed/wordpress', // WordPress

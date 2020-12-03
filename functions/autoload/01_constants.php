@@ -28,6 +28,7 @@ add_action('init', function () {
 
     define('URL_COMPANY_LOGO', URL_SVG.'logo.svg');
     define('URL_COMPANY_NAME', '株式会社LIG');
+    define('KEY_COLOR', ' #0f5599');
 
     /**
      * CONTENTS
