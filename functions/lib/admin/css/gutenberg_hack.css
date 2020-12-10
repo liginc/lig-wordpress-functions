@@ -1,0 +1,14 @@
+.block-editor-panel-color-gradient-settings {
+    display: none !important;
+}
+
+.block-editor-panel-color-gradient-settings > .components-panel__body {
+    display: none;
+}
+
+/*
+ * ボタンの枠線を消すため
+ */
+.components-range-control {
+    display: none !important;
+}

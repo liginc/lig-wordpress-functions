@@ -13,7 +13,7 @@ function block_types_white_list($allowed_block_types)
         'core/list', // リスト
 //        'core/audio', // 音声
 //        'core/cover', // カバー
-//        'core/file', // ファイル
+        'core/file', // ファイル
 //        'core/video', // 動画
 
         // フォーマット
@@ -44,7 +44,7 @@ function block_types_white_list($allowed_block_types)
         // 埋め込み
 //        'core/embed', // 埋め込み
 //        'core-embed/twitter', // Twitter
-//        'core-embed/youtube', // YouTube
+        'core-embed/youtube', // YouTube
 //        'core-embed/facebook', // Facebook
 //        'core-embed/instagram', // Instagram
 //        'core-embed/wordpress', // WordPress
@@ -108,7 +108,7 @@ add_action('after_setup_theme', 'custom_gutenberg_style');
 function custom_gutenberg_style($stylesheet)
 {
     add_theme_support('editor-styles');
-    add_editor_style('assets/css/editor.css');
+    add_editor_style('functions/lib/admin/css/gutenberg.css');
 }
 
 /**
@@ -132,3 +132,17 @@ function disable_block_style()
     wp_dequeue_style('wp-block-library');
     wp_dequeue_style('wp-block-library-theme');
 }
+
+//Gutenbergハック用CSS
+add_action('admin_enqueue_scripts', function () {
+    wp_enqueue_style('gutenberg_hack', get_template_directory_uri() . '/functions/lib/admin/css/gutenberg_hack.css');
+});
+
+
+//JS読み込み
+add_action('enqueue_block_editor_assets', function () {
+    wp_enqueue_script('gb-classes', get_template_directory_uri() . '/functions/lib/admin/js/gutenberg_filters.js', ['wp-blocks']);
+});
+
+add_theme_support( 'editor-gradient-presets', array() );
+add_theme_support( 'disable-custom-gradients' );
