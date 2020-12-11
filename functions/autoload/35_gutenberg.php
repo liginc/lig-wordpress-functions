@@ -26,8 +26,8 @@ function block_types_white_list($allowed_block_types)
 //        'core/verse', // 詩
 
         // レイアウト要素
-        'core/buttons', // ボタン
-//        'core/columns', // カラム
+//        'core/buttons', // ボタン
+        'core/columns', // カラム
 //        'core/media-text', // メディアと文章
 //        'core/more', // 続きを読む
 //        'core/nextpage', // 改ページ
@@ -81,35 +81,48 @@ function block_types_white_list($allowed_block_types)
     return $allowed_block_types;
 }
 
-/**
- * 色設定を無効化
- */
-add_action('after_setup_theme', 'disable_color_picker');
-function disable_color_picker()
-{
+
+add_action('after_setup_theme', function () {
+    /**
+     * 色設定を無効化
+     */
     add_theme_support('editor-color-palette');
     add_theme_support('disable-custom-colors');
-}
-
-/**
- * フォントサイズ変更を無効化
- */
-add_action('after_setup_theme', 'disable_font_size_changer');
-function disable_font_size_changer()
-{
+    /**
+     * フォントサイズ変更を無効化
+     */
     add_theme_support('editor-font-sizes');
     add_theme_support('disable-custom-font-sizes');
-}
+
+    /**
+     * ボタンの配色禁止
+     */
+    add_theme_support('editor-gradient-presets', array());
+    add_theme_support('disable-custom-gradients');
+
+    add_theme_support('disable-custom-colors');
+
+    /**
+     * エディタにスタイルを適用
+     */
+//    add_theme_support('editor-styles');
+//    add_editor_style('functions/lib/admin/css/gutenberg.css');
+
+//    unregister_block_pattern( $pattern_name );
+
+
+});
+add_action('after_setup_theme', 'custom_gutenberg_style');
+
 
 /**
- * エディタにスタイルを適用
+ * パターン削除
  */
-add_action('after_setup_theme', 'custom_gutenberg_style');
-function custom_gutenberg_style($stylesheet)
-{
-    add_theme_support('editor-styles');
-    add_editor_style('functions/lib/admin/css/gutenberg.css');
-}
+add_filter('block_editor_settings', function ($editor_settings) {
+    if (array_key_exists('__experimentalBlockPatterns', $editor_settings)) unset($editor_settings['__experimentalBlockPatterns']);
+    if (array_key_exists('__experimentalBlockPatternCategories', $editor_settings)) unset($editor_settings['__experimentalBlockPatternCategories']);
+    return $editor_settings;
+});
 
 /**
  * デフォルトスタイル削除
@@ -143,6 +156,3 @@ add_action('admin_enqueue_scripts', function () {
 add_action('enqueue_block_editor_assets', function () {
     wp_enqueue_script('gb-classes', get_template_directory_uri() . '/functions/lib/admin/js/gutenberg_filters.js', ['wp-blocks']);
 });
-
-add_theme_support( 'editor-gradient-presets', array() );
-add_theme_support( 'disable-custom-gradients' );
