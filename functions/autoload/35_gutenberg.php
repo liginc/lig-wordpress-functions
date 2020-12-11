@@ -139,7 +139,7 @@ function remove_default_editor_style($editor_settings, $post)
  * Gutenbergのcss読み込み無効化
  */
 add_action('wp_enqueue_scripts', 'disable_block_style', 9999);
-add_action('admin_enqueue_scripts', 'disable_block_style', 9999);
+//add_action('admin_enqueue_scripts', 'disable_block_style', 9999);
 function disable_block_style()
 {
     wp_dequeue_style('wp-block-library');
