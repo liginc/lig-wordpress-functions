@@ -1,13 +1,15 @@
 <?php
-/**
- * Enable Title
- */
-add_theme_support( 'title-tag' );
+add_action( 'after_setup_theme', function(){
+    /**
+     * Enable Title
+     */
+    add_theme_support( 'title-tag' );
 
-/**
- * Enable post thumbnail
- */
-add_theme_support('post-thumbnails');
+    /**
+     * Enable post thumbnail
+     */
+    add_theme_support('post-thumbnails');
+} );
 
 
 /**
