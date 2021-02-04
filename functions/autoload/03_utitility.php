@@ -1,8 +1,14 @@
 <?php
 /**
+ * Enable Title
+ */
+add_theme_support( 'title-tag' );
+
+/**
  * Enable post thumbnail
  */
 add_theme_support('post-thumbnails');
+
 
 /**
  * encode

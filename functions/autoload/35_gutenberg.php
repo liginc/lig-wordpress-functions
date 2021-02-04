@@ -112,8 +112,6 @@ add_action('after_setup_theme', function () {
 
 
 });
-add_action('after_setup_theme', 'custom_gutenberg_style');
-
 
 /**
  * パターン削除
