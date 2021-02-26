@@ -129,12 +129,18 @@ function lig_reset_cdn_cache_clear_result_display()
 {
 
     $status = get_option('lig_reset_cdn_cache_clear');
+
+    if(empty($status)) {
+        lig_reset_cdn_cache_clear();
+        $status = get_option('lig_reset_cdn_cache_clear');
+    }
+
     $status = unserialize($status);
     if (!empty($status)) {
         echo '<p>前回のキャッシュクリア試行日時：' . $status[0] . '</p><p style="color: ' . (($status[1] === true) ? 'green' : 'red') . ';">ステータス：' . (($status[1] === true) ? '成功' : '失敗<br>------<br>' . $status[1]) . '</p>';
     }
 
-    echo '<button id="clear-cache">手動キャッシュクリア</button>';
+    echo '<button id="lig_reset_cdn_cache_clear">手動キャッシュクリア</button>';
 }
 
 add_action('admin_enqueue_scripts', function () {
@@ -145,7 +151,7 @@ add_action('admin_enqueue_scripts', function () {
         'ajax_url' => admin_url('admin-ajax.php'),
         'action' => 'lig_reset_cdn_cache_clear',
     ];
-    wp_localize_script($handle, 'localize', $localize);
+    wp_localize_script($handle, 'localize_lig_reset_cdn_cache_clear', $localize);
 
     wp_enqueue_script($handle);
 });

@@ -20,6 +20,8 @@ add_action('init', function () {
     define('URL_OGIMAGE_WIDTH', 1200);
     define('URL_OGIMAGE_HEIGHT', 630);
 
+    define('PATH_SRCSET', '/assets/images');
+
     define('URL_FAVICON', resolve_uri('/assets/images/favicon.ico'));
     define('URL_TOUCH_ICON', resolve_uri('/assets/images/apple-touch-icon-precomposed.png'));
     define('URL_NO_IMAGE', resolve_uri('assets/images/noimage.png'));

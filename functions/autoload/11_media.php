@@ -12,15 +12,26 @@ function lig_custom_madia()
 {
     //管理画面では動作させない
     if (!is_admin()) add_filter('the_content', 'get_custom_img_display');
-
-    $sizes = RESIZE_IMAGE_SIZES;
-
-    //各サイズごとに1xと2xの画像サイズを登録する（ex:1-thumb,2-thumb）
-    foreach ($sizes as $size) {
-        add_image_size('1-' . $size, $size, 9999);
-        add_image_size('2-' . $size, $size * 2, 9999);
-    }
 }
+
+add_action('admin_init',function(){
+    foreach (RESIZE_IMAGE_SIZES as $size) {
+        add_image_size($size, $size, 9999);
+    }
+});
+
+function disable_image_sizes( $new_sizes ) {
+    unset( $new_sizes['thumbnail'] );
+    unset( $new_sizes['medium'] );
+    unset( $new_sizes['large'] );
+    unset( $new_sizes['medium_large'] );
+    unset( $new_sizes['1536x1536'] );
+    unset( $new_sizes['2048x2048'] );
+    return $new_sizes;
+}
+add_filter( 'intermediate_image_sizes_advanced', 'disable_image_sizes' );
+
+add_filter( 'big_image_size_threshold', '__return_false');
 
 //wp_make_content_images_responsiveを置換関数部分以外そのまま利用
 function get_custom_img_display($content)
@@ -200,18 +211,18 @@ function srcset($path, $alt = '', $class = '', $mode = 'full')
         foreach ($sizes as $s) {
             if ($s < $mode['default']) continue;
             if (!array_key_exists(1, $default_srcset['original']) && in_array(PATH_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2], $files)) {
-                $default_srcset['original'][1] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 1x';
-                $default_srcset['webp'][1] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . ' webp') . ' 1x';
+                $default_srcset['original'][1] = resolve_uri('/assets/images' . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 1x';
+                $default_srcset['webp'][1] = resolve_uri('/assets/images' . $parsed[1] . '-resized-' . $s . ' webp') . ' 1x';
                 continue;
             }
             if ($s >= ($mode['default'] * 2) && in_array(PATH_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2], $files)) {
-                $default_srcset['original'][2] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 2x';
-                $default_srcset['webp'][2] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . '.webp') . ' 2x';
+                $default_srcset['original'][2] = resolve_uri('/assets/images' . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 2x';
+                $default_srcset['webp'][2] = resolve_uri('/assets/images' . $parsed[1] . '-resized-' . $s . '.webp') . ' 2x';
                 break;
             }
             if ($s === end($sizes) && array_key_exists(1, $default_srcset['original'])) {
-                $default_srcset['original'][2] = resolve_uri(URL_IMAGES . $path) . ' 2x';
-                $default_srcset['webp'][2] = resolve_uri(URL_IMAGES . $parsed[1]) . '.webp 2x';
+                $default_srcset['original'][2] = resolve_uri('/assets/images' . $path) . ' 2x';
+                $default_srcset['webp'][2] = resolve_uri('/assets/images' . $parsed[1]) . '.webp 2x';
             }
         }
     }
@@ -224,26 +235,26 @@ function srcset($path, $alt = '', $class = '', $mode = 'full')
         foreach ($sizes as $s) {
             if ($s < $v) continue;
             if (!array_key_exists(1, $original_files) && in_array(PATH_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2], $files)) {
-                $original_files[1] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 1x';
-                $webp_files[1] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . '.webp') . ' 1x';
+                $original_files[1] = resolve_uri(PATH_SRCSET . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 1x';
+                $webp_files[1] = resolve_uri(PATH_SRCSET . $parsed[1] . '-resized-' . $s . '.webp') . ' 1x';
                 continue;
             }
             if ($s >= ($v * 2) && in_array(PATH_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2], $files)) {
-                $original_files[2] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 2x';
-                $webp_files[2] = resolve_uri(URL_IMAGES . $parsed[1] . '-resized-' . $s . '.webp') . ' 2x';
+                $original_files[2] = resolve_uri(PATH_SRCSET . $parsed[1] . '-resized-' . $s . $parsed[2]) . ' 2x';
+                $webp_files[2] = resolve_uri(PATH_SRCSET . $parsed[1] . '-resized-' . $s . '.webp') . ' 2x';
                 break;
             }
             if ($s === end($sizes) && array_key_exists(1, $original_files)) {
-                $original_files[2] = resolve_uri(URL_IMAGES . $path) . ' 2x';
-                $webp_files[2] = resolve_uri(URL_IMAGES . $parsed[1]) . '.webp 2x';
+                $original_files[2] = resolve_uri(PATH_SRCSET . $path) . ' 2x';
+                $webp_files[2] = resolve_uri(PATH_SRCSET . $parsed[1]) . '.webp 2x';
             }
         }
         if (!empty($original_files)) $original .= '<source media="(max-width: ' . $k . 'px)" srcset="' . implode(',', $original_files) . '">';
         if (!empty($webp_files)) $webp .= '<source type="image/webp" media="(max-width: ' . $k . 'px)" srcset="' . implode(',', $webp_files) . '">';
 
         if ($v === end($mode) && in_array(PATH_IMAGES . $parsed[1] . '.webp', $files)) {
-            $webp .= '<source type="image/webp" srcset="' . ((!empty($default_srcset)) ? implode(',', $default_srcset['webp']) : resolve_uri(URL_IMAGES . $parsed[1]) . '.webp') . '">';
+            $webp .= '<source type="image/webp" srcset="' . ((!empty($default_srcset)) ? implode(',', $default_srcset['webp']) : resolve_uri(PATH_SRCSET . $parsed[1]) . '.webp') . '">';
         }
     }
-    return '<picture>' . $webp . $original . '<img src="' . resolve_uri(URL_IMAGES . $path) . '" class="' . $class . '" alt="' . $alt . '" loading="lazy" ' . $image_size[3] . ((!empty($default_srcset)) ? ' srcset="' . implode(',', $default_srcset['original']) . '"' : '') . '></picture>';
+    return '<picture>' . $webp . $original . '<img src="' . resolve_uri(PATH_SRCSET . $path) . '" class="' . $class . '" alt="' . $alt . '" loading="lazy" ' . $image_size[3] . ((!empty($default_srcset)) ? ' srcset="' . implode(',', $default_srcset['original']) . '"' : '') . '></picture>';
 }

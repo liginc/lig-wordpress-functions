@@ -151,7 +151,7 @@ class LIG_YOAST_SETTINGS
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'action' => 'lig_yoast_cache_clear',
             ];
-            wp_localize_script($handle, 'localize', $localize);
+            wp_localize_script($handle, 'localize_lig_yoast_cache_clear', $localize);
 
             wp_enqueue_script($handle);
         });
