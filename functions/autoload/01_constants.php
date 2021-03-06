@@ -93,6 +93,15 @@ add_action('init', function () {
 
 
     /**
+     * Google Maps API
+     */
+    define('GMAP_API_LOCAL','');
+    define('GMAP_API_DEVELOPMENT','');
+    define('GMAP_API_STAGING','');
+    define('GMAP_API_PRODUCTION','');
+
+
+    /**
      * IMAGE SIZES
      */
     define('RESIZE_IMAGE_SIZES', [
