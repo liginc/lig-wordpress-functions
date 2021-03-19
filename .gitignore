@@ -1,4 +1,8 @@
 .idea
-.sass-cache
+.atom
+.vscode
 .DS_Store
-.keep
+*.map
+*.log
+!.keep
+!.gitkeep
