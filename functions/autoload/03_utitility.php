@@ -63,9 +63,17 @@ function is_current(?bool $bool = false)
 /**
  * Attach modifier class
  */
-function get_modified_class(string $class_name,string $modifier)
+function get_modified_class(string $class_name, $modifier)
 {
-    return (!empty($modifier)) ? $class_name . ' ' . $class_name . '--' . $modifier : $class_name;
+    $rtn = '';
+    if (!empty($modifier)) {
+        if (!is_array($modifier)) {
+            $rtn = ' ' . $class_name . '--' . $modifier;
+        } else {
+            foreach ($modifier as $m) $rtn .= ' ' . $class_name . '--' . $m;
+        }
+    }
+    return $class_name . $rtn;
 }
 
 /**
