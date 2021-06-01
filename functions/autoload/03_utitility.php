@@ -1,15 +1,15 @@
 <?php
-add_action( 'after_setup_theme', function(){
+add_action('after_setup_theme', function () {
     /**
      * Enable Title
      */
-    add_theme_support( 'title-tag' );
+    add_theme_support('title-tag');
 
     /**
      * Enable post thumbnail
      */
     add_theme_support('post-thumbnails');
-} );
+});
 
 
 /**
@@ -74,6 +74,22 @@ function get_modified_class(string $class_name, $modifier)
         }
     }
     return $class_name . $rtn;
+}
+
+/**
+ * Attach addtional class
+ */
+function get_addtional_class($addtional)
+{
+    $rtn = '';
+    if (!empty($addtional)) {
+        if (!is_array($addtional)) {
+            $rtn = ' ' . $addtional;
+        } else {
+            foreach ($addtional as $a) $rtn .= ' ' . $a;
+        }
+    }
+    return $rtn;
 }
 
 /**
