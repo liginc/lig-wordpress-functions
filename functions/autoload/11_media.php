@@ -36,7 +36,7 @@ function get_svg_img($name, array $opt = []): string
         throw new Exception('SVG file "' . $filePath . '" does not exist');
     }
     $data = file_get_contents($filePath);
-    $src = ($base64) ? 'data:image/svg+xml;charset=utf8,' . base64_encode($data) : resolve_uri('/assets/svg/' . $name . '.svg');
+    $src = ($base64) ? 'data:image/svg+xml;base64,' . base64_encode($data) : resolve_uri('/assets/svg/' . $name . '.svg');
     if (empty($width) && empty($height)) {
         $xmlget = simplexml_load_string($data);
         if (!empty($xmlget->attributes()->viewBox)) {
