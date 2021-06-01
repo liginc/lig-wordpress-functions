@@ -1,4 +1,67 @@
 <?php
+
+/**
+ * SVG
+ */
+
+/**
+ * Include SVG
+ */
+function get_svg(string $name): string
+{
+    $filePath = STYLESHEETPATH . '/assets/svg/' . $name . '.svg';
+    if (!file_exists($filePath)) {
+        throw new Exception('SVG file "' . $filePath . '" does not exist');
+    }
+    return file_get_contents($filePath);
+}
+
+
+/**
+ * return img tag
+ */
+function get_svg_img(string $name, array $opt = []): string
+{
+    $default_opt = [
+        'base64' => false,
+        'alt' => '',
+        'class' => '',
+        'id' => '',
+        'widht' => '',
+        'height' => '',
+    ];
+    extract(array_merge($default_opt, $opt));
+    $filePath = STYLESHEETPATH . '/assets/svg/' . $name . '.svg';
+    if (!file_exists($filePath)) {
+        throw new Exception('SVG file "' . $filePath . '" does not exist');
+    }
+    $data = file_get_contents($filePath);
+    $src = ($base64) ? 'data:image/svg+xml;base64,' . base64_encode($data) : resolve_uri('/assets/svg/' . $name . '.svg');
+    if (empty($width) && empty($height)) {
+        $xmlget = simplexml_load_string($data);
+        if (!empty($xmlget->attributes()->viewBox)) {
+            $viewBox_raw = (array)$xmlget->attributes()->viewBox;
+            $viewBox = preg_split('/ /', (string)$viewBox_raw[0]);
+            $width = (!empty($viewBox[2])) ? $viewBox[2] : '';
+            $height = (!empty($viewBox[3])) ? $viewBox[3] : '';
+        } else {
+            $width = '';
+            $height = '';
+        }
+    }
+    return '<img src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '" class="'.$class.'" id="'.$id.'">';
+}
+
+
+/**
+ * Include SVG Sprite
+ */
+function get_svg_sprite(string $name): string
+{
+    return '<svg class="svg-sprited svg-' . $name . '" role="img"><use xlink:href="' . get_template_directory_uri() . '/assets/svg/sprite.svg#sprite-' . $name . '" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg>';
+}
+
+
 /**
  * 記事詳細用
  */
@@ -14,24 +77,25 @@ function lig_custom_madia()
     if (!is_admin()) add_filter('the_content', 'get_custom_img_display');
 }
 
-add_action('admin_init',function(){
+add_action('admin_init', function () {
     foreach (RESIZE_IMAGE_SIZES as $size) {
         add_image_size($size, $size, 9999);
     }
 });
 
-function disable_image_sizes( $new_sizes ) {
-    unset( $new_sizes['thumbnail'] );
-    unset( $new_sizes['medium'] );
-    unset( $new_sizes['large'] );
-    unset( $new_sizes['medium_large'] );
-    unset( $new_sizes['1536x1536'] );
-    unset( $new_sizes['2048x2048'] );
+function disable_image_sizes($new_sizes)
+{
+    unset($new_sizes['thumbnail']);
+    unset($new_sizes['medium']);
+    unset($new_sizes['large']);
+    unset($new_sizes['medium_large']);
+    unset($new_sizes['1536x1536']);
+    unset($new_sizes['2048x2048']);
     return $new_sizes;
 }
-add_filter( 'intermediate_image_sizes_advanced', 'disable_image_sizes' );
+add_filter('intermediate_image_sizes_advanced', 'disable_image_sizes');
 
-add_filter( 'big_image_size_threshold', '__return_false');
+add_filter('big_image_size_threshold', '__return_false');
 
 //wp_make_content_images_responsiveを置換関数部分以外そのまま利用
 function get_custom_img_display($content)
@@ -96,7 +160,7 @@ function get_srcset_webp_by_attachement_id($attachment_id = null, $alt = '', $cl
     if (is_null($attachment_id)) return;
 
     $image_meta = wp_get_attachment_metadata($attachment_id);
-    $alt = (!empty($alt)) ? $alt : (!empty ($attachment_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true))) ? $attachment_alt : get_the_title($attachment_id);
+    $alt = (!empty($alt)) ? $alt : (!empty($attachment_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true))) ? $attachment_alt : get_the_title($attachment_id);
 
     return set_srcset_and_webp_with_source_tag($image_meta, $alt, $class, $mode);
 }
