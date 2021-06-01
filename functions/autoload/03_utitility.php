@@ -35,14 +35,6 @@ function get_first_term($post_id, $tax = 'category')
 }
 
 /**
- * Include SVG Sprite
- */
-function get_svg_sprite($name)
-{
-    return '<svg class="svg-sprited svg-' . $name . '" role="img"><use xlink:href="' . get_template_directory_uri() . '/assets/svg/sprite.svg#sprite-' . $name . '" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg>';
-}
-
-/**
  * return target="_blank"
  * $flg Boolean
  */
