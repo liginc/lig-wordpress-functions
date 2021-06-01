@@ -27,6 +27,8 @@ function get_svg_img($name, array $opt = []): string
         'alt' => '',
         'class' => '',
         'id' => '',
+        'height' => '',
+        'widht' => ''
     ];
     extract(array_merge($opt, $default_opt));
     $filePath = STYLESHEETPATH . '/assets/svg/' . $name . '.svg';
@@ -35,15 +37,17 @@ function get_svg_img($name, array $opt = []): string
     }
     $data = file_get_contents($filePath);
     $src = ($base64) ? base64_encode($data) : resolve_uri('/assets/svg/' . $name . '.svg');
-    $xmlget = simplexml_load_string($data);
-    if (!empty($xmlget->attributes()->viewBox)) {
-        $viewBox_raw = (array)$xmlget->attributes()->viewBox;
-        $viewBox = preg_split('/ /', (string)$viewBox_raw[0]);
-        $width = (!empty($viewBox[2])) ? $viewBox[2] : '';
-        $height = (!empty($viewBox[3])) ? $viewBox[3] : '';
-    } else {
-        $width = '';
-        $height = '';
+    if (!empty($width) && !empty($height)) {
+        $xmlget = simplexml_load_string($data);
+        if (!empty($xmlget->attributes()->viewBox)) {
+            $viewBox_raw = (array)$xmlget->attributes()->viewBox;
+            $viewBox = preg_split('/ /', (string)$viewBox_raw[0]);
+            $width = (!empty($viewBox[2])) ? $viewBox[2] : '';
+            $height = (!empty($viewBox[3])) ? $viewBox[3] : '';
+        } else {
+            $width = '';
+            $height = '';
+        }
     }
     return '<img src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '">';
 }
