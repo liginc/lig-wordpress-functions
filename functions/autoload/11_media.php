@@ -7,7 +7,7 @@
 /**
  * Include SVG
  */
-function get_svg($name): string
+function get_svg(string $name): string
 {
     $filePath = STYLESHEETPATH . '/assets/svg/' . $name . '.svg';
     if (!file_exists($filePath)) {
@@ -20,17 +20,17 @@ function get_svg($name): string
 /**
  * return img tag
  */
-function get_svg_img($name, array $opt = []): string
+function get_svg_img(string $name, array $opt = []): string
 {
     $default_opt = [
         'base64' => false,
         'alt' => '',
         'class' => '',
         'id' => '',
+        'widht' => '',
         'height' => '',
-        'widht' => ''
     ];
-    extract(array_merge($opt, $default_opt));
+    extract(array_merge($default_opt, $opt));
     $filePath = STYLESHEETPATH . '/assets/svg/' . $name . '.svg';
     if (!file_exists($filePath)) {
         throw new Exception('SVG file "' . $filePath . '" does not exist');
@@ -49,14 +49,14 @@ function get_svg_img($name, array $opt = []): string
             $height = '';
         }
     }
-    return '<img src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '">';
+    return '<img src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '" class="'.$class.'" id="'.$id.'">';
 }
 
 
 /**
  * Include SVG Sprite
  */
-function get_svg_sprite($name): string
+function get_svg_sprite(string $name): string
 {
     return '<svg class="svg-sprited svg-' . $name . '" role="img"><use xlink:href="' . get_template_directory_uri() . '/assets/svg/sprite.svg#sprite-' . $name . '" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg>';
 }
