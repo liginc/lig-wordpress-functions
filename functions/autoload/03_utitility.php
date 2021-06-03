@@ -71,7 +71,7 @@ function get_modified_class(string $class_name, $modifier)
 /**
  * Attach addtional class
  */
-function get_addtional_class($addtional)
+function get_additional_class($addtional)
 {
     $rtn = '';
     if (!empty($addtional)) {

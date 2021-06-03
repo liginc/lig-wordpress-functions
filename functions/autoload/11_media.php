@@ -49,7 +49,7 @@ function get_svg_img(string $name, array $opt = []): string
             $height = '';
         }
     }
-    return '<img src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '" class="'.$class.'" id="'.$id.'">';
+    return '<img src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '" class="' . $class . '" id="' . $id . '">';
 }
 
 
@@ -160,8 +160,12 @@ function get_srcset_webp_by_attachement_id($attachment_id = null, $alt = '', $cl
     if (is_null($attachment_id)) return;
 
     $image_meta = wp_get_attachment_metadata($attachment_id);
-    $alt = (!empty($alt)) ? $alt : (!empty($attachment_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true))) ? $attachment_alt : get_the_title($attachment_id);
-
+    if (empty($alt)) {
+        $alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
+        if (empty($alt)) {
+            $alt = get_the_title($attachment_id);
+        }
+    }
     return set_srcset_and_webp_with_source_tag($image_meta, $alt, $class, $mode);
 }
 
