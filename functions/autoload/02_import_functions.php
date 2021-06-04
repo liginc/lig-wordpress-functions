@@ -3,7 +3,7 @@
 /**
  * Import templates
  */
-function import_template($tpl, $vars = array())
+function import_template(string $tpl, array $vars = [])
 {
     $tpl = ltrim($tpl, '/') . '.php';
     $path = locate_template(array($tpl));
@@ -14,7 +14,7 @@ function import_template($tpl, $vars = array())
     include $path;
 }
 
-function import_part($tpl, $vars = array())
+function import_part(string $tpl, array $vars = [])
 {
     import_template('parts/' . ltrim($tpl, '/'), $vars);
 }
