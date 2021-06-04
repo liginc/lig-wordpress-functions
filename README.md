@@ -29,6 +29,250 @@ Source: https://necolas.github.io/normalize.css/
 
 # WordPress Functions
 
+## Structure
+
+```
+├── autoload
+│   ├── 00_laravel-mix-boilerplate.php // mix関数
+│   ├── 01_constants.php // 定数を定義
+│   ├── 02_import_functions.php // テンプレート読み込みを定義
+│   ├── 03_utitility.php //
+│   ├── 04_security.php //
+│   ├── 05_posttype_taxonomy.php //
+│   ├── 07_wp_head.php
+│   ├── 09_mutibyte_patch.php
+│   ├── 10_404.php
+│   ├── 11_media.php
+│   ├── 11_pagination.php
+│   ├── 12_json-ld.php
+│   ├── 20_disable_comment.php
+│   ├── 25_admin_bar_menus.php
+│   ├── 30_admin_utility.php
+│   ├── 35_gutenberg.php
+│   ├── 50_login.php
+│   └── 99_acf_auto_export_import.php
+├── class
+│   └── LIG_YOAST_SETTINGS.php
+├── config
+│   └── LIG_YOAST_CONFIG.php
+├── extra
+│   ├── 04_utility_extra.php
+│   ├── 06_query_hooks.php
+│   ├── 31_disable_default_post_type.php
+│   ├── 55_acf.php
+│   ├── 55_yoast.php
+│   ├── 60_admin_utility_extra.php
+│   ├── 9999_dummy_post.php
+│   ├── 99_category_pages.php
+│   ├── 99_excerpt.php
+│   ├── 99_html_compression.php
+│   ├── 99_lightsail_cdn.php
+│   ├── 99_mw_form.php
+│   ├── 99_rewrite_hooks.php
+│   └── 99_yoast_settings.php
+├── lib
+│   └── admin
+│       ├── css
+│       │   ├── gutenberg.css
+│       │   └── gutenberg_hack.css
+│       └── js
+│           ├── gutenberg_filters.js
+│           ├── lightsail_cdn.js
+│           └── yoast_cache_clear.js
+└── vender.php
+```
+
+## 00_laravel-mix-boilerplate.php
+
+### mix
+
+laravel-mix-boilerplate でのビルドが出力する manifest.json を元にキャッシュバスティングされたパスを返す
+
+#### function mix($path, $manifestDirectory = '')
+
+$path はプロトコルから指定する
+
+#### resolve_uri($path, $manifestDirectory = '')
+
+mix のショートハンド
+
+$path にはテーマディレクトリからのパスを渡す
+
+使用例
+
+```php
+<?= mix('/assets/images/logo.png') ?>
+```
+
+## 01_constants.php
+
+各種定数を定義
+
+init にフックしているため、それ以前の呼び出しではエラーになる
+
+## 02_import_functions.php
+
+テンプレート読み込みの関数・そのヘルパー関数を定義
+
+#### import_template(string $tpl, array $vars = [])
+
+$tpl はテーマからの相対パスを指定する
+
+拡張子は自動で php がつくため不要
+
+`$vars`にはパーツ内に渡したい変数を配列で指定する
+
+キーが変数名、値が値となる
+
+使用例
+
+```php
+<?php
+import_template('modules/two-column',[
+    'modifier' => 'wide',
+    'post' => $post
+]);
+?>
+```
+
+#### import_part(string $tpl, array $vars = [])
+
+`import_template()`のショートハンド
+
+$tpl はテーマ直下の parts ディレクトリからの相対パスを指定する
+
+拡張子は自動で php がつくため不要
+
+使用例
+
+```php
+<?php import_part('article') ?>
+```
+
+#### import_vars_whitelist(array $vars, array $whitelist = [])
+
+`$vars`のキーを`$whitelist`でフィルタリングする
+
+`$whitelist`にはデフォルト値を指定する
+
+主に、読み込まれたパーツ側で使用する
+
+デフォルトで`modifier`と`additional`が付与される
+
+使用例
+
+```php
+<?php
+/**
+ * parts/article.php
+ *
+ * 呼び出し元から$post, $taxonomyが渡される想定
+ *
+ * 定義されている変数をホワイトリストでフィルタリング
+ * ホワイトリストに存在しない変数は$defaultに指定した値をセット
+ * キー名を変数名として展開する
+ */
+$default = [
+     'post' => $_GLOBALS['post'], // $postが空だった場合は$_GLOBALS['post']を参照する
+     'taxonomy' => ''
+];
+extract(import_vars_whitelist(get_defined_vars(),$default));
+?>
+```
+
+## 03_utitility.php
+
+ユーティリティ関数群を定義
+
+#### is_blank(?bool $bool = false)
+
+`$bool`に`true`を渡すと`target="_blank" rel="noopener noreferrer"`が返却される
+
+使用例
+
+```php
+<a href="https://example.com"<?= is_blank(true) ?>>google</a>
+```
+
+#### is_current(?bool $bool = false)
+
+`$bool`に`true`を渡すと` is-current`が返却される
+
+使用例
+
+```php
+<?php
+// TOPページだったらis-currentを付与する
+?>
+<a href="<?= URL_HOME ?>" class="<?= is_current(is_front_page()) ?>">TOP</a>
+```
+
+#### get_modified_class(string $class_name, $modifier)
+
+`$class_name`にベースとなるクラス名、`$modifier`にモディファイヤを文字列または配列で指定する
+
+使用例
+
+```php
+<p class="<?= get_modified_class('text', 'blue') ?>">hoge</p>
+<?php
+// 出力結果
+// <p class="text text--blue">hoge</p>
+?>
+
+<p class="<?= get_modified_class('text', ['red','bold']) ?>">fuga</p>
+<?php
+// 出力結果
+// <p class="text text--red text--bold">fuga</p>
+?>
+```
+
+#### get_additional_class($additional)
+
+`$additional`に追加したいクラス名を文字列または配列で指定する
+
+主にインポートされたパーツの中で使用する
+
+使用例
+
+```php
+<p class="<?= get_additional_class('hoge') ?>">hoge</p>
+<?php
+// 出力結果
+// <p class="hoge">hoge</p>
+?>
+
+<p class="<?= get_additional_class(['hoge','fuga']) ?>">fuga</p>
+<?php
+// 出力結果
+// <p class="hoge fuga">fuga</p>
+?>
+```
+
+#### add_filter('body_class', クロージャ)
+
+`body_class`にフィルターをかける
+
+### 環境判定
+
+`wp-config.php`に定義した定数`WP_ENVIRONMENT_TYPE`を判定し、ブール値を返却する
+
+#### is_local()
+
+`WP_ENVIRONMENT_TYPE`が`local`の場合 true を返却
+
+#### is_development()
+
+`WP_ENVIRONMENT_TYPE`が`development`の場合 true を返却
+
+#### is_staging()
+
+`WP_ENVIRONMENT_TYPE`が`staging`の場合 true を返却
+
+#### is_production()
+
+`WP_ENVIRONMENT_TYPE`が`production`の場合 true を返却
+
 ## 11_media.php
 
 ### SVG
@@ -77,10 +321,10 @@ $default_opt = [
 ```
 
 #### get_svg_sprite(string $name);
-svgスプライトの指定された箇所をuseで返却する
 
-第一引数にsvg-sprite.svgのid名を指定する
+svg スプライトの指定された箇所を use で返却する
 
+第一引数に svg-sprite.svg の id 名を指定する
 
 ```php
 // svg-sprite.svg#logoを出力
