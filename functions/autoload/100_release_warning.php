@@ -1,7 +1,7 @@
 <?php
 add_action('admin_init', function () {
     global $pagenow;
-    if (!is_blog_admin() || wp_get_environment_type() !== 'local' || $pagenow !== 'index.php') {
+    if (!is_blog_admin() || wp_get_environment_type() === 'local' || $pagenow !== 'index.php') {
         return;
     }
     $err = [];
