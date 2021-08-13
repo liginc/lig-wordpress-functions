@@ -273,6 +273,62 @@ extract(import_vars_whitelist(get_defined_vars(),$default));
 
 `WP_ENVIRONMENT_TYPE`が`production`の場合 true を返却
 
+## 04_security.php
+
+セキュリティ周りのヘルパー関数軍、及びフックなど
+
+#### xss($str = null)
+
+`$str`を HTML エンティティして返却
+
+#### header_register_callback(closure)
+
+レスポンスヘッダーから PHP バージョンを削除
+
+#### add_filter('wp_headers',closure)
+
+レスポンスヘッダーから、X-Pingback を削除
+
+#### remove_action('template_redirect', 'rest_output_link_header', 11, 0)
+
+レスポンスヘッダーから REST API のエンドポイントを削除 Ï
+
+#### remove_action('wp_head', 'wp_generator');
+
+`wp_head`から WordPress のバージョン情報を削除
+
+#### add_filter('xmlrpc_enabled', '\_\_return_false');
+
+XML-RPC 機能を無効化
+
+#### remove_action('template_redirect', 'wp_redirect_admin_locations', 1000)
+
+ログイン URL の自動リダイレクトを禁止
+
+#### remove_action('template_redirect'、'\_\_return_empty_array')
+
+著者アーカイブページを無効化
+
+#### define('AUTOMATIC_UPDATER_DISABLED', false);
+
+開発版、マイナー、メジャー、すべての WordPress の自動更新を無効化
+
+## 05_posttype_taxonomy.php
+
+投稿タイプやタクソノミーの登録など
+
+#### add_action('after_setup_theme',closure)
+
+カスタム投稿タイプで title-tag とアイキャッチを有効化させる
+
+#### add_post_type_and_taxonomy()
+
+カスタム投稿タイプ・カスタムタクソノミーを追加する
+
+## 07_wp_head.php
+wp_headのフィルター用
+
+
 ## 11_media.php
 
 ### SVG

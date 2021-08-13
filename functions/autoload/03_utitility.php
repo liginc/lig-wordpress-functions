@@ -1,6 +1,38 @@
 <?php
+add_action('after_setup_theme', function () {
+    /**
+     * Enable Title
+     */
+    add_theme_support('title-tag');
+
+    /**
+     * Enable post thumbnail
+     */
+    add_theme_support('post-thumbnails');
+});
 
 
+/**
+ * encode
+ */
+function xss($str = null)
+{
+    return htmlentities($str, ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Get first term object
+ */
+function get_first_term($post_id, $tax = 'category')
+{
+    $terms = get_the_terms($post_id, $tax);
+
+    if (!empty($terms[0])) {
+        return $terms[0];
+    } else {
+        return [];
+    }
+}
 
 /**
  * return target="_blank"
@@ -39,14 +71,14 @@ function get_modified_class(string $class_name, $modifier)
 /**
  * Attach addtional class
  */
-function get_additional_class($additional)
+function get_additional_class($addtional)
 {
     $rtn = '';
-    if (!empty($additional)) {
-        if (!is_array($additional)) {
-            $rtn = ' ' . $additional;
+    if (!empty($addtional)) {
+        if (!is_array($addtional)) {
+            $rtn = ' ' . $addtional;
         } else {
-            foreach ($additional as $a) $rtn .= ' ' . $a;
+            foreach ($addtional as $a) $rtn .= ' ' . $a;
         }
     }
     return $rtn;
@@ -84,31 +116,5 @@ add_filter('body_class', function ($classes) {
  */
 function is_local()
 {
-    return (wp_get_environment_type() === 'local');
-}
-
-/**
- * Return develop environment or not
- */
-function is_development()
-{
-    return (wp_get_environment_type() === 'development');
-}
-
-
-/**
- * Return staging environment or not
- */
-function is_staging()
-{
-    return (wp_get_environment_type() === 'staging');
-}
-
-
-/**
- * Return production environment or not
- */
-function is_production()
-{
-    return (wp_get_environment_type() === 'production');
+    return (strpos($_SERVER['HTTP_HOST'], 'localhost') === 0);
 }
