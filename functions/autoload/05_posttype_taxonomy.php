@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Register post_type and taxonomy
  */
@@ -31,10 +32,10 @@ function add_post_type_and_taxonomy()
         'label' => 'POST TYPE NAME',
         'rewrite' => array('slug' => 'post_type_name')
     ));
-    register_post_type("post_type_name", $args);
+    register_post_type('post_type_name', $args);
 
 
-    $args = array_merge($default_term_args,array(
+    $args = array_merge($default_term_args, array(
         'label' => 'TAXONOMY NAME',
         'rewrite' => array('slug' => 'taxonomy slug')
     ));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MW WP Formの各要素を置換する際に使用
  *
@@ -15,7 +16,11 @@ function lig_mw_input_html_filter($type, $attr = [])
 {
     $path = WP_PLUGIN_DIR . '/mw-wp-form/templates/form-fields/' . $type . '.php';
 
-    if (!array_key_exists('MW_WP_Form', $GLOBALS) || !is_file($path)) return;
+
+    if (!is_file($path)) {
+        throw new Exception('MW WP Form template does not exit');
+        return;
+    }
 
     extract($attr);
 

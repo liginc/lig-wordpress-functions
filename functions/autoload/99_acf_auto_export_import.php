@@ -1,6 +1,6 @@
 <?php
 
-if (wp_get_environment_type() === 'development') {
+if (wp_get_environment_type() === 'local') {
     add_action('acf/update_field_group', 'lig_acf_auto_export');
     add_action('acf/untrash_field_group', 'lig_acf_auto_export');
     add_action('acf/trash_field_group', 'lig_acf_auto_export');
@@ -38,11 +38,11 @@ function lig_acf_auto_export()
      */
     $json = array();
 
-// bail early if no keys
+    // bail early if no keys
     if (!$selected) return false;
 
 
-// construct JSON
+    // construct JSON
     foreach ($selected as $key) {
 
         // load field group
@@ -63,7 +63,6 @@ function lig_acf_auto_export()
 
         // add to json array
         $json[] = $field_group;
-
     }
 
 
@@ -104,7 +103,6 @@ function lig_acf_auto_export()
 
         // echo
         $data .= "acf_add_local_field_group({$code});" . "\r\n" . "\r\n";
-
     }
 
     $data .= "endif;";
@@ -112,5 +110,4 @@ function lig_acf_auto_export()
     if (is_writable(__DIR__)) {
         file_put_contents(__DIR__ . '/99_acf_setting.php', $data);
     }
-
 }
