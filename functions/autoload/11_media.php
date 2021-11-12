@@ -243,7 +243,7 @@ function set_srcset_and_webp_with_source_tag($image_meta, $alt = '', $class = ''
                 $default_webp_srcset .= ', ' . $base_url . $image_meta['sizes']['2-' . $default]['file'] . '.webp 2x';
             }
         } else {
-            $default_original_srcset .= ', ' . $uploads['baseurl'] . $image_meta['file'] . ' 2x';
+           $default_original_srcset .= ', ' . $uploads['baseurl'] . '/' .$image_meta['file'] . ' 2x';
             if (file_exists($uploads['basedir'] . '/' . $image_meta['file'] . '.webp')) {
                 $default_webp_srcset .= ', ' . $uploads['baseurl'] . '/' . $image_meta['file'] . '.webp';
             }
