@@ -91,7 +91,7 @@ add_action('after_setup_theme', function () {
     /**
      * フォントサイズ変更を無効化
      */
-    add_theme_support('editor-font-sizes');
+    add_theme_support('editor-font-sizes', array());
     add_theme_support('disable-custom-font-sizes');
 
     /**
