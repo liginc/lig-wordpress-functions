@@ -79,7 +79,7 @@ Source: https://necolas.github.io/normalize.css/
 │           ├── gutenberg_filters.js
 │           ├── lightsail_cdn.js
 │           └── yoast_cache_clear.js
-└── vender.php
+└── vendor.php
 ```
 
 ## 00_laravel-mix-boilerplate.php
