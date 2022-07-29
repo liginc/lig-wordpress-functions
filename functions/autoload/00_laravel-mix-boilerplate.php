@@ -70,7 +70,7 @@ if (!function_exists('resolve_uri')) {
             $path = get_stylesheet_directory_uri() . mix($path, $manifestDirectory);
             return $path;
         } catch (Exception $e) {
-            trigger_error($e->getMessage(), E_WARNING);
+            trigger_error($e->getMessage(), E_USER_WARNING);
             return get_stylesheet_directory_uri() . $path;
         }
     }
